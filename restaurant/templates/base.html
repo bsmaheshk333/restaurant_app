@@ -1,0 +1,187 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RK FoodStop</title>
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha384-Kyv8jw6U6cEppjS0EL5NDxq8phh3TUp/JD2eAB2pDrks0M0dIE72OYhCxR8/3hQI"
+            crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+            integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIb8GyJsH0Ag+XwFkd5f2F8+0B4Uc4t7flw1I9Tp"
+            crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<style>
+  /* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f4f4f4;
+}
+
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 1rem;
+    text-align: center;
+}
+
+header h1 {
+    font-size: 2.5rem;
+}
+
+main {
+    padding: 2rem;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.menu {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.menu-item {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 1rem;
+    flex: 1 1 calc(33.333% - 1rem);
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item h3 {
+    margin-bottom: 0.5rem;
+}
+
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 1rem;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+    .menu-item {
+        flex: 1 1 calc(50% - 1rem);
+    }
+}
+
+@media (max-width: 480px) {
+    .menu-item {
+        flex: 1 1 100%;
+    }
+}
+
+.menu-item img {
+    width: 100%; /* Adjust as needed to fit the container */
+    height: auto; /* Maintain aspect ratio */
+    max-width: 150px; /* Adjust to desired size */
+    max-height: 150px; /* Ensure images don’t exceed this height */
+    object-fit: cover; /* Crop the image to fit the dimensions */
+    display: block;
+    margin: 10 auto; /* Center the image if needed */
+}
+
+</style>
+
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="">RKFoodStop</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{% url 'base' %}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+          {% if request.user.is_authenticated %}
+          {% if request.user.is_staff %}
+            <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>
+          {% endif %}
+          {% else %}
+            <a class="nav-link" href="#">Disabled</a>
+          {% endif %}
+      </li>
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dropdown
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="#">Action</a>
+          <a class="dropdown-item" href="#">Another action</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">Something else here</a>
+        </div>
+      </li>
+      <!--li class="nav-item">
+        <a class="nav-link disabled" href="#">Disabled</a>
+      </li-->
+    </ul>
+    <form action="" method="post" class="form-inline my-2 my-lg-0">
+      {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search" placeholder="search item" aria-label="Search" name="query">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+<div class="container">
+    <a href="{% url 'admin:index' %}">Admin</a>
+
+  {% for item in menu_items %}
+  <!--menu header-->
+  <header>
+        <h1>{{item.menu}}</h1>
+    </header>
+    <main>
+        <section class="container">
+            <h2>Delicious {{item.menu}} Options</h2>
+            <div class="menu">
+                <div class="menu-item">
+                    <h3>{{item.name}}</h3>
+                    <p>
+                        <span>
+                            <img src="{{item.image.url}}" alt="">
+                        </span>
+                    </p>
+                    <span>
+                        {{item.description}}
+                    </span>
+
+                </div>
+            </div>
+        </section>
+    </main>
+  </div>
+    {% endfor %}
+</div>
+</div>
+
+<main>
+{% block content %}
+{% endblock %}
+</main>
+</body>
+</html>
