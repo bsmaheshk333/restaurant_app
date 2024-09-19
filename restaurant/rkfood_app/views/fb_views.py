@@ -103,6 +103,8 @@ def customer_register(request):
         is_username_exist = User.objects.filter(username=username).exists()
         if is_username_exist:
             errors['username'] = 'user with this name exist'
+        if is_username_exist in ["admin", 'root', 'superuser']:
+            errors['restricted_username'] = f'the username {is_username_exist} is restricted.'
 
         if not any(char.isdigit() for char in password):
             errors['password'] = 'password must contain at least 1 digit.'
@@ -110,17 +112,27 @@ def customer_register(request):
         if not phone.isdigit() or len(phone) < 10:
             errors['phone'] = "phone number must be digits and must be at least 10 digits."
 
+        is_phone_no_exist = Customer.objects.filter(phone=phone).exists()
+        if is_phone_no_exist:
+            errors['phone'] = "Phone number exist already"
+
         if errors:
             return JsonResponse(errors, status=400)
-        user, created = User.objects.get_or_create(username=username,password=password, email=email)
-                                                   #default= {'password': password, 'email':email})
-        if created:
-            Customer.objects.create(user=user, phone=phone)
-        else:
-            # update phone number if user exist already
-            user.customer_profile.phone = phone
-            user.customer_profile.save()
-        return redirect("login")
+        try:
+            user, created = User.objects.get_or_create(username=username, email=email)
+                                                       #default= {'password': password, 'email':email})
+            if created:
+                user.set_password(password)
+                user.save()
+                Customer.objects.create(user=user, phone=phone)
+            else:
+                # update phone number if user exist already
+                user.customer_profile.phone = phone
+                user.customer_profile.save()
+            return redirect("login")
+        except:
+            errors['db'] = 'database error occurred! Please try again.'
+            return JsonResponse(errors, status=400)
     else:
         return render(request, "customer/register.html")
 
