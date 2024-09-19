@@ -1,5 +1,8 @@
 from django.db import models
 import datetime
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
+
 
 """
 Documentation
@@ -29,19 +32,28 @@ class Restaurant(models.Model):
     address = models.TextField(max_length=500, verbose_name='address')
     phone_number = models.CharField(max_length=12)
     email_addr = models.EmailField()
-    opens_at = models.TimeField(null=False, blank=False)
-    close_at = models.TimeField(null=False, blank=False)
+    opens_at = models.TimeField(null=False, blank=False, verbose_name="opening time")
+    close_at = models.TimeField(null=False, blank=False, verbose_name="close time")
 
     @property
     def formatted_open_time(self):
-        return self.opens_at.strftime("%I:%M:%p")
+        opening_time = self.opens_at.strftime("%I:%M:%p")
+        return opening_time
 
     @property
     def formatted_close_time(self):
         return self.close_at.strftime("%I:%M:%p")
 
+    # handle a situation when user tries to set close time before even its opens time.
+    def clean(self):
+        if self.close_at <= self.opens_at:
+            raise ValidationError("close time must be later than opening time.")
+
+
     def __str__(self):
         return f"{self.name} Opens at: {self.formatted_open_time}, Close at: {self.formatted_close_time}"
+
+
 
 
 menu_choice = [
@@ -76,28 +88,12 @@ class MenuItems(models.Model):
 
 
 class Customer(models.Model):
-    full_name = models.CharField(max_length=50)
-    phone = models.CharField(max_length=12, unique=True)
-    email = models.EmailField()
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True, blank=True,
+                                related_name="customer_profile")
+    phone = models.CharField(max_length=12, unique=True, blank=False, null=False)
 
     def __str__(self):
-        return self.full_name
-
-
-# class Booking(models.Model):
-#     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='booking')
-#     # if there are multiple restaurant please include below relationship,
-#     # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE)
-#     booking_date = models.DateTimeField(auto_now_add=True)
-#     # if in case, bookings includes Menu items,
-#     # menu_items = models.ForeignKey(MenuItems, on_delete=models.CASCADE)
-#
-#     def __str__(self):
-#         return f"booked by customer {self.customer} on {self.booking_date}"
-#
-#     @property
-#     def format_booking_date(self):
-#         return self.booking_date.strftime("%I:%M:%p")
+        return f"{self.user}"
 
 
 class Order(models.Model):

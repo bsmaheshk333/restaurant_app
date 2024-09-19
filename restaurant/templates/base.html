@@ -14,6 +14,8 @@
             integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIb8GyJsH0Ag+XwFkd5f2F8+0B4Uc4t7flw1I9Tp"
             crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+
+
 <style>
   /* Basic Reset */
 * {
@@ -68,16 +70,6 @@ main {
     margin-bottom: 0.5rem;
 }
 
-footer {
-    background-color: #333;
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-}
-
 /* Responsive Styles */
 @media (max-width: 768px) {
     .menu-item {
@@ -92,7 +84,7 @@ footer {
 }
 
 .menu-item img {
-    width: 100%; /* Adjust as needed to fit the container */
+    width: auto; /* Adjust as needed to fit the container */
     height: auto; /* Maintain aspect ratio */
     max-width: 150px; /* Adjust to desired size */
     max-height: 150px; /* Ensure images don’t exceed this height */
@@ -105,6 +97,7 @@ footer {
 
 </head>
 <body>
+<!-- header -->
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
   <a class="navbar-brand" href="">RKFoodStop</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -140,19 +133,37 @@ footer {
         <a class="nav-link disabled" href="#">Disabled</a>
       </li-->
     </ul>
-    <form action="" method="post" class="form-inline my-2 my-lg-0">
-      {% csrf_token %}
-      <input class="form-control mr-sm-2" type="search" placeholder="search item" aria-label="Search" name="query">
+    <!--form action="{% url 'search_item' %}" method="post" class="form-inline my-2 my-lg-0"-->
+    <!--i need to form data to be sent to the same page or url to avoid further page reload
+    so i left action="" as default.-->
+      <form action="" method="post" class="form-inline my-2 my-lg-0">
+        {% csrf_token %}
+      <input class="form-control mr-sm-2" type="search"
+             placeholder="search item" aria-label="Search" name="query_item">
       <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
     </form>
   </div>
 </nav>
+<!--header ends -->
+{% if not request.user.is_authenticated %}
 <div class="container">
-    <a href="{% url 'admin:index' %}">Admin</a>
-
+    <h2>you are not logged in. </h2> <br>
+    <p style="color: red;">Please Login here
+        <a href="{% url 'login' %}">Login</a>
+    </p>
+{% else %}
+<div class="container">
+    <div class="container-fluid">
+        <p style="text-align: center; color: red;">
+            <span>
+                Close Time: {{close_time}}
+            </span>
+        </p>
+    </div>
   {% for item in menu_items %}
   <!--menu header-->
-  <header>
+  {% if item.menu|lower == "Breakfast"|lower %}
+<header>
         <h1>{{item.menu}}</h1>
     </header>
     <main>
@@ -175,13 +186,8 @@ footer {
         </section>
     </main>
   </div>
+    {% endif %}
     {% endfor %}
-</div>
-</div>
-
-<main>
-{% block content %}
-{% endblock %}
-</main>
+{% endif %}
 </body>
 </html>
