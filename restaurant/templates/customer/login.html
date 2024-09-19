@@ -1,0 +1,95 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>RK FoodStop</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+          crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Arial', sans-serif;
+        }
+        .container {
+            max-width: 400px;
+            margin-top: 50px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .form-group label {
+            font-weight: bold;
+        }
+        .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+        }
+        .btn-primary:hover {
+            background-color: #0056b3;
+            border-color: #004085;
+        }
+        .mt-3 a {
+            color: #007bff;
+            text-decoration: none;
+        }
+        .mt-3 a:hover {
+            text-decoration: underline;
+        }
+        .form-control {
+            border-radius: 4px;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .btn {
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+  <div class="container">
+      <h2 class="text-center">Login</h2>
+
+      <!-- Display Alerts -->
+      {% if messages %}
+          <div class="alert-container">
+              {% for message in messages %}
+                  <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                      {{ message }}
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                  </div>
+              {% endfor %}
+          </div>
+      {% endif %}
+
+      <form action="{% url 'login' %}" method="POST">
+          {% csrf_token %}
+          <div class="form-group">
+              <label for="username">Username</label>
+              <input type="text" id="username" name="username" class="form-control" required>
+          </div>
+          <div class="form-group">
+              <label for="password">Password</label>
+              <input type="password" id="password" name="password" class="form-control" required>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block">Login</button>
+          <p class="mt-3 text-center">
+              <span>Don't have an account?</span>
+              <a href="{% url 'register' %}">Register</a>
+          </p>
+      </form>
+  </div>
+
+  <!-- Include JavaScript for Bootstrap alerts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-Kyv8jw6U6cEppjS0EL5NDxq8phh3TUp/JD2eAB2pDrks0M0dIE72OYhCxR8/3hQI" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIb8GyJsH0Ag+XwFkd5f2F8+0B4Uc4t7flw1I9Tp" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+</body>
+</html>

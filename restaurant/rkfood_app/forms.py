@@ -1,5 +1,7 @@
 from django import forms
-from .models import Menu, MenuItems, Order
+from .models import Menu, MenuItems, Order, Customer
+from django.contrib.auth.models import User
+
 
 
 class MenuForm(forms.ModelForm):
@@ -14,3 +16,13 @@ class MenuItemsForm(forms.ModelForm):
         fields = ['menu', 'name', 'description', 'price']
 
 
+class CustomerRegistrationForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'email', 'password']
+
+
+class CustomerProfileForm(forms.ModelForm):
+    class Meta:
+        model = Customer
+        fields = ['phone']

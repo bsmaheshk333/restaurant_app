@@ -46,6 +46,18 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': ['rest_framework_permission.IsAuthenticated']
 }
 
+CACHE = {
+    'default':{
+        'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+        'LOCATION': 'redis://127.0.0.1:6379/1',
+        'OPTION': {
+            'CLIENT_CLASS': 'django.redis.client.DefaultClient'
+        }
+    }
+}
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/0'  # Using Redis as the message broker for Celery
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -86,20 +98,6 @@ WSGI_APPLICATION = 'restaurant.wsgi.application'
 #         'NAME': BASE_DIR / 'db.sqlite3',
 #     }
 # }
-
-# DATABASE = {
-#     'default':
-#         {
-#             'ENGINE': 'django.db.backends.postgresql',
-#             'NAME': 'restaurant_db',
-#             'USER': 'postgres',
-#             'PASSWORD': 'Radhamohan@333',
-#             'HOST': 'localhost',
-#             'PORT': '5432',
-#         }
-# }
-
-# settings.py
 
 DATABASES = {
     'default': {
@@ -155,4 +153,5 @@ MEDIA_URL = '/media/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-LOGOUT_REDIRECT_URL = 'login'
+LOGOUT_REDIRECT_URL = '/'
+LOGIN_URL = '/login/'
