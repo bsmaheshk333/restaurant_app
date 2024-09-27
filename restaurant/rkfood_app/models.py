@@ -76,12 +76,13 @@ class Menu(models.Model):
 
 class MenuItems(models.Model):
     menu = models.ForeignKey(Menu, on_delete=models.CASCADE, related_name='main_menu')
-    # if in case you have multiple restaurant,
+    # if in case you have multiple restaurant, ( not required now)
     # restaurant = models.ForeignKey(Restaurant, on_delete=models.CASCADE, related_name="restaurant")
     name = models.CharField(max_length=100)
     image = models.ImageField(default="avatar.jpg", upload_to="menu_items/", verbose_name="image of the food")
     description = models.TextField(max_length=100)
     price = models.DecimalField(max_digits=10, decimal_places=2)
+    slug = models.SlugField()
 
     def __str__(self):
         return self.name
@@ -95,6 +96,11 @@ class Customer(models.Model):
     def __str__(self):
         return f"{self.user}"
 
+    # get last login
+    @property
+    def get_last_login(self):
+        print(self.user.last_login)
+        return self.user.last_login
 
 class Order(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="customer_ordered")
