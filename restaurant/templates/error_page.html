@@ -1,0 +1,31 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Error Page</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static 'css/error.css' %}">
+</head>
+<body>
+
+<div class="error-container text-center">
+    <h1>Error</h1>
+    <h2>Something went wrong!</h2>
+    <p>We're sorry, but an unexpected error has occurred. Please try the following:</p>
+    <ul class="list-unstyled">
+        <li>Check your internet connection.</li>
+        <li>Refresh the page.</li>
+        <li>Return to the <a href="/">home page</a>.</li>
+    </ul>
+    <p>If the problem persists, please contact support.</p>
+    <a href="/" class="btn btn-danger">Go to Home</a>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

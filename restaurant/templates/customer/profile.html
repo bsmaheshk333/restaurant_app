@@ -1,10 +1,77 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>customer profile</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block title %}
+{% endblock %}
+{% block  content %}
+    <div class="container">
+        <h1>Customer Profile Information</h1>
+        <div class="profile-section">
+            <h2>Profile Information</h2>
+            <div class="profile-details">
+                <!--username-->
+                <div class="profile-item">
+                    <label>Username:</label>
+                    <span>{{ profile.user.username }} </span>
+                </div>
+                <!--firstname-->
+                {% if profile.user.first_name %}
+                <div class="profile-item" style="color: red;">
+                    <label>First Name:</label>
+                    <span>{{ profile.user.first_name.capitalize }}</span>
+                </div>
 
-</body>
-</html>
+                {% else %}
+                <div class="profile-item">
+                    <label>First Name:</label>
+                    <span>Not provided</span>
+                </div>
+                {% endif %}
+                <!--lastname-->
+                {% if profile.user.last_name %}
+                <div class="profile-item">
+                    <label>Last Name:</label>
+                    <span>{{ profile.user.last_name.capitalize }}</span>
+                </div>
+                {% else %}
+                <div class="profile-item">
+                    <label>Last Name:</label>
+                    <span>not provided</span>
+                </div>
+                {% endif %}
+                <!--email-->
+                <div class="profile-item">
+                    <label>Email:</label>
+                    <span>{{ profile.user.email }}</span>
+                </div>
+                <!-- phone -->
+                {% if profile.phone %}
+                <div class="profile-item">
+                    <label>Phone:</label>
+                    <span>{{ profile.phone }}</span>
+                </div>
+                {% else %}
+                <div class="profile-item">
+                    <label>Phone:</label>
+                    <span>Not provided</span>
+                </div>
+                {% endif %}
+                <!-- last login -->
+                <div class="profile-item">
+                    <label>Last Login:</label>
+                    <span>{{ request.user.last_login }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="order-section">
+            <h2>Ordered Items</h2>
+            <ul class="order-list">
+                <li>
+                    <span><strong>Item:</strong> {{ item_name }}</span>
+                    <span><strong>Quantity:</strong> {{ quantity }}</span>
+                    <span><strong>Price:</strong> {{ price }}</span>
+                </li>
+                <!-- Repeat for other orders -->
+            </ul>
+        </div>
+    </div>
+{% endblock %}
